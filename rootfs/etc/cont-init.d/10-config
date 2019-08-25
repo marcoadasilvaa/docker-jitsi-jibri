@@ -10,11 +10,13 @@ fi
 [ -z "${DISPLAY}" ] \
 && ( echo -e "\e[31mERROR: Please set DISPLAY variable.\e[39m"; kill 1; exit 1 )
 
+echo "snd-aloop" >> /etc/modules
+
+modprobe snd-aloop
+
 # check loaded snd_aloop module and exit if is not loaded on the host
 [ -z "$(lsmod |grep -om1 snd_aloop)" ] \
 && ( echo -e "\e[31mERROR: Please load snd-aloop module on the docker host.\e[39m"; kill 1; exit 1 )
-
-echo "snd-aloop" >> /etc/modules
 
 # get host's audio group id
 #host_audio_group="$(stat -c %g /dev/snd/pcmC1D0p)"
@@ -55,3 +57,9 @@ chown -R jibri ${JIBRI_RECORDING_DIR}
 mkdir -p ${JIBRI_LOGS_DIR}
 chown -R jibri ${JIBRI_LOGS_DIR}
 
+mv /usr/bin/google-chrome  /usr/bin/google-chrome-original
+
+echo '/usr/bin/google-chrome-original --no-sandbox --disable-setuid-sandbox --headless --disable-gpu $@/' > /usr/bin/google-chrome
+
+chmod +x /usr/bin/google-chrome-original
+chmod +x /usr/bin/google-chrome
