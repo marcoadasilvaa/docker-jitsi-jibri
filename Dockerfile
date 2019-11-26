@@ -28,6 +28,9 @@ RUN	\
 	mkdir -p /usr/share/man/man1 && \
 	apt-dpkg-wrap apt-get update && \
 	apt-dpkg-wrap apt-get install -y linux-image-$(uname -r) linux-headers-$(uname -r) && \
+	#If Ubuntu
+	apt-dpkg-wrap apt-get install -y linux-modules-extra-4.15.0-1049-gcp && \
+	apt-dpkg-wrap apt-get install -y linux-modules-extra-$(uname -r) && \
 	apt-dpkg-wrap apt-get install -y openjdk-8-jre-headless && \
 	apt-cleanup
 
